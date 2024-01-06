@@ -6,7 +6,9 @@ import czu.bigdata.flightAnalysis.config.HadoopConfig;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.spark.sql.SparkSession;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
@@ -19,6 +21,10 @@ class FlightAnalysisApplicationTests {
 
     @Resource
     private HadoopConfig hadoopConfig;
+
+    @Autowired
+    private SparkSession sparkSession;
+
     @Test
     void contextLoads() throws URISyntaxException, IOException {
         FileSystem fs = hadoopConfig.getFs();
@@ -34,4 +40,8 @@ class FlightAnalysisApplicationTests {
         fs.close();
     }
 
+    @Test
+    void sparkTest(){
+        System.out.println(sparkSession.sessionUUID());
+    }
 }
