@@ -1,0 +1,21 @@
+spring:
+  profiles:
+    active: ht
+
+---
+spring:
+  config:
+    activate:
+      on-profile: ht
+hdfs:
+  path: hdfs://node1:8020
+  username: root
+---
+spring:
+  config:
+    activate:
+      on-profile: gm
+hdfs:
+  path: hdfs://xxx:9000
+  username: xxx
+---
