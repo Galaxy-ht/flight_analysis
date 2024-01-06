@@ -8,11 +8,11 @@ spring:
     activate:
       on-profile: ht
 hdfs:
-  path: hdfs://node1:8020
+  path: hdfs://192.168.88.131:8020
   username: root
 
 spark:
-  path: spark://xxx.xx.xx.xx:7077
+  path: spark://192.168.88.131:7077
 
 ---
 
@@ -22,10 +22,10 @@ spring:
       on-profile: gm
 
 hdfs:
-  path: hdfs://192.168.145.131:8020
+  path: hdfs://192.168.88.131:8020
   username: root
 
 spark:
-  path: spark://192.168.145.131:7077
+  path: spark://192.168.88.131:7077
 
 ---

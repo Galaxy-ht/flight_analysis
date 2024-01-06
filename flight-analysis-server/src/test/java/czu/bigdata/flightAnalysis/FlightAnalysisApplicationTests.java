@@ -1,7 +1,6 @@
 package czu.bigdata.flightAnalysis;
 
 
-import java.io.BufferedReader;
 import czu.bigdata.flightAnalysis.config.HadoopConfig;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
@@ -12,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
