@@ -25,8 +25,8 @@ public class MySparkSession {
         // 在这里创建 SparkSession 的逻辑
         if (sparkSession == null) {
             sparkSession = SparkSession.builder()
-                    .appName("YourAppName")
-                    .master("local[*]")  // 适配你的 Spark 环境
+                    .appName("test")
+                    .master("spark://node1:7077")  // 适配你的 Spark 环境
                     .getOrCreate();
         }
         return sparkSession;

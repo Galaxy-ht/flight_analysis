@@ -1,5 +1,6 @@
 package czu.bigdata.flightAnalysis.controller;
 
+import czu.bigdata.flightAnalysis.AnalysisADR;
 import czu.bigdata.flightAnalysis.config.HadoopConfig;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
@@ -35,7 +36,7 @@ public class TestController {
 
     @RequestMapping("/")
     public void test(@RequestParam("sql") @NotBlank String sql) {
-        testService.getData(sql);
+        AnalysisADR.analysis(sparkSession);
     }
 
 //    @RequestMapping("/")
