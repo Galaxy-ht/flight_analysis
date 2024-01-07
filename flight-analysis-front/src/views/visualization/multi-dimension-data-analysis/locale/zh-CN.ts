@@ -1,4 +1,5 @@
 export default {
+  'menu.visualization.BigScreen': '数据大屏',
   'menu.visualization.multiDimensionDataAnalysis': '多维数据分析',
   'multiDAnalysis.card.title.dataOverview': '数据总览',
   'multiDAnalysis.dataOverview.contentProduction': '内容生产量',

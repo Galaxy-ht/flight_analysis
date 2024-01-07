@@ -4,13 +4,13 @@
       <a-space>
         <img
           alt="logo"
-          src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/dfdba5317c0c20ce20e64fac803d52bc.svg~tplv-49unhts6dw-image.image"
+          src="/src/assets/images/logo.png"
         />
         <a-typography-title
           :style="{ margin: 0, fontSize: '18px' }"
           :heading="5"
         >
-          Arco Pro
+          Flight Analysis
         </a-typography-title>
         <icon-menu-fold
           v-if="!topMenu && appStore.device === 'mobile'"
@@ -33,35 +33,6 @@
         </a-tooltip>
       </li>
       <li>
-        <a-tooltip :content="$t('settings.language')">
-          <a-button
-            class="nav-btn"
-            type="outline"
-            :shape="'circle'"
-            @click="setDropDownVisible"
-          >
-            <template #icon>
-              <icon-language />
-            </template>
-          </a-button>
-        </a-tooltip>
-        <a-dropdown trigger="click" @select="changeLocale as any">
-          <div ref="triggerBtn" class="trigger-btn"></div>
-          <template #content>
-            <a-doption
-              v-for="item in locales"
-              :key="item.value"
-              :value="item.value"
-            >
-              <template #icon>
-                <icon-check v-show="item.value === currentLocale" />
-              </template>
-              {{ item.label }}
-            </a-doption>
-          </template>
-        </a-dropdown>
-      </li>
-      <li>
         <a-tooltip
           :content="
             theme === 'light'
@@ -81,33 +52,6 @@
             </template>
           </a-button>
         </a-tooltip>
-      </li>
-      <li>
-        <a-tooltip :content="$t('settings.navbar.alerts')">
-          <div class="message-box-trigger">
-            <a-badge :count="9" dot>
-              <a-button
-                class="nav-btn"
-                type="outline"
-                :shape="'circle'"
-                @click="setPopoverVisible"
-              >
-                <icon-notification />
-              </a-button>
-            </a-badge>
-          </div>
-        </a-tooltip>
-        <a-popover
-          trigger="click"
-          :arrow-style="{ display: 'none' }"
-          :content-style="{ padding: 0, minWidth: '400px' }"
-          content-class="message-popover"
-        >
-          <div ref="refBtn" class="ref-btn"></div>
-          <template #content>
-            <message-box />
-          </template>
-        </a-popover>
       </li>
       <li>
         <a-tooltip
@@ -162,22 +106,6 @@
               </a-space>
             </a-doption>
             <a-doption>
-              <a-space @click="$router.push({ name: 'Info' })">
-                <icon-user />
-                <span>
-                  {{ $t('messageBox.userCenter') }}
-                </span>
-              </a-space>
-            </a-doption>
-            <a-doption>
-              <a-space @click="$router.push({ name: 'Setting' })">
-                <icon-settings />
-                <span>
-                  {{ $t('messageBox.userSettings') }}
-                </span>
-              </a-space>
-            </a-doption>
-            <a-doption>
               <a-space @click="handleLogout">
                 <icon-export />
                 <span>
@@ -212,6 +140,7 @@
   const avatar = computed(() => {
     return userStore.avatar;
   });
+
   const theme = computed(() => {
     return appStore.theme;
   });

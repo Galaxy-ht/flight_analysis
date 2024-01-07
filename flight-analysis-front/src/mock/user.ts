@@ -16,9 +16,8 @@ setupMock({
       if (isLogin()) {
         const role = window.localStorage.getItem('userRole') || 'admin';
         return successResponseWrap({
-          name: '郝涛',
-          avatar:
-            '//lf1-xgcdn-tos.pstatp.com/obj/vcloud/vadmin/start.8e0e4855ee346a46ccff8ff3e24db27b.png',
+          name: window.localStorage.getItem('userName'),
+          avatar: '/src/assets/images/avatar.jpg',
           email: 'wangliqun@email.com',
           job: 'frontend',
           jobName: '前端艺术家',
@@ -47,10 +46,18 @@ setupMock({
       if (!password) {
         return failResponseWrap(null, '密码不能为空', 50000);
       }
-      if (username === 'admin' && password === 'admin') {
+      if (username === 'haotao' && password === '123') {
         window.localStorage.setItem('userRole', 'admin');
+        window.localStorage.setItem('userName', '郝涛');
         return successResponseWrap({
           token: '12345',
+        });
+      }
+      if (username === 'guomin' && password === '123') {
+        window.localStorage.setItem('userRole', 'admin');
+        window.localStorage.setItem('userName', '郭敏');
+        return successResponseWrap({
+          token: '23456',
         });
       }
       if (username === 'user' && password === 'user') {

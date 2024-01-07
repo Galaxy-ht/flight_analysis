@@ -33,6 +33,16 @@ const VISUALIZATION: AppRouteRecordRaw = {
         roles: ['admin'],
       },
     },
+    {
+      path: "big-screen",
+      name: "BigScreen",
+      component: () => import('@/views/visualization/big-screen/index.vue'),
+      meta: {
+        locale: 'menu.visualization.BigScreen',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
   ],
 };
 
