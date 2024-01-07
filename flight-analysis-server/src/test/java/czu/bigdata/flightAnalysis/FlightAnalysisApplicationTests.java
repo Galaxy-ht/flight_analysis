@@ -22,7 +22,7 @@ class FlightAnalysisApplicationTests {
     @Resource
     private HadoopConfig hadoopConfig;
 
-    @Autowired
+    @Resource
     private SparkSession sparkSession;
 
     @Test

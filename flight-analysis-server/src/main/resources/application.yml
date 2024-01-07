@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: gm
+    active: ht
 
 ---
 spring:
@@ -8,11 +8,11 @@ spring:
     activate:
       on-profile: ht
 hdfs:
-  path: hdfs://192.168.88.131:8020
+  path: hdfs://node1:8020
   username: root
 
 spark:
-  path: spark://192.168.88.131:7077
+  path: spark://node1:7077
 
 ---
 
