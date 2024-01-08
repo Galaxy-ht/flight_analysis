@@ -1,5 +1,5 @@
 <template>
-  <a-layout-footer class="footer">Flight Analysis</a-layout-footer>
+  <a-layout-footer class="footer">Flight Analysis ©CZU BigData203 </a-layout-footer>
 </template>
 
 <script lang="ts" setup></script>
