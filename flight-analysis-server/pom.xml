@@ -12,9 +12,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot.version>2.6.13</spring-boot.version>
-        <scala.version>2.12.12</scala.version>
+        <scala.version>2.12.10</scala.version>
         <kafka.version>2.4.1</kafka.version>
-        <spark.version>3.4.0</spark.version>
+        <spark.version>3.1.2</spark.version>
         <hadoop.version>3.3.0</hadoop.version>
         <hbase.version>2.1.0</hbase.version>
         <zookeeper.version>3.4.6</zookeeper.version>
