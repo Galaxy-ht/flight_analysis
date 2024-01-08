@@ -14,7 +14,7 @@ class WordCountService extends Serializable{
   @Resource
   private val sparkSession: SparkSession = null
 
-  def wordCount(filePath: String): JSONArray = {
+  def wordCount(): JSONArray = {
     val filePath = "hdfs://node1:8020/test/input/wordcount.txt"
     val sc: SparkContext = sparkSession.sparkContext
     val fileRdd = sc.textFile(filePath).flatMap(_.split(" "))

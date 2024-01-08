@@ -19,6 +19,6 @@ public class TestController {
 
     @GetMapping("/wordCount")
     public JSONArray wordCount(@RequestParam String filePath) {
-        return wordCountService.wordCount(filePath);
+        return wordCountService.wordCount();
     }
 }
