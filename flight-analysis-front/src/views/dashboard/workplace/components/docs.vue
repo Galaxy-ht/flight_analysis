@@ -6,9 +6,6 @@
     :body-style="{ paddingTop: 0 }"
     style="height: 166px"
   >
-    <template #extra>
-      <a-link>{{ $t('workplace.viewMore') }}</a-link>
-    </template>
     <a-row>
       <a-col :span="12">
         <a-link>

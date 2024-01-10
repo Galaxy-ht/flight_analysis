@@ -24,6 +24,7 @@
   import useChartOption from '@/hooks/chart-option';
   import { ToolTipFormatterParams } from '@/types/echarts';
   import { AnyObject } from '@/types/global';
+  import { getDayChart } from "@/api/apis";
 
   function graphicFactory(side: AnyObject) {
     return {
@@ -117,7 +118,7 @@
           return `<div>
             <p class="tooltip-title">${firstElement.axisValueLabel}</p>
             <div class="content-panel"><span>总航班数</span><span class="tooltip-value">${(
-              Number(firstElement.value) * 10000
+              Number(firstElement.value)
             ).toLocaleString()}</span></div>
           </div>`;
         },
@@ -177,7 +178,7 @@
   const fetchData = async () => {
     setLoading(true);
     try {
-      const { data: chartData } = await queryContentData();
+      const { data: chartData } = await getDayChart(7);
       chartData.forEach((el: ContentDataRecord, idx: number) => {
         xAxis.value.push(el.x);
         chartsData.value.push(el.y);

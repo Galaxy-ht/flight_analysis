@@ -1,16 +1,16 @@
 export default {
-  'menu.visualization.dataAnalysis': '分析页',
+  'menu.visualization.dataAnalysis': '实时分析页',
   'dataAnalysis.title.publicOpinion': '舆情分析',
-  'dataAnalysis.card.title.allVisitors': '访问总人次',
-  'dataAnalysis.card.title.contentPublished': '内容发布量',
-  'dataAnalysis.card.title.totalComment': '评论总量',
-  'dataAnalysis.card.title.totalShare': '分享总量',
-  'dataAnalysis.card.yesterday': '较昨日',
-  'dataAnalysis.contentPublishRatio': '内容发布比例',
-  'dataAnalysis.popularAuthor': '热门作者榜单',
+  'dataAnalysis.card.title.allVisitors': '航班起飞统计', // x: time y: fly count
+  'dataAnalysis.card.title.contentPublished': '起飞取消统计', // x: time(12h) y: fly count
+  'dataAnalysis.card.title.totalComment': '航班到达总数', // x: time y: arrive count
+  'dataAnalysis.card.title.totalShare': '到达时间统计', // x: 晚点、正点、提前 y: arrive count
+  'dataAnalysis.card.yesterday': '较昨日', // today count / yesterday count
+  'dataAnalysis.contentPublishRatio': '正晚点总览', // x: time y: y1: 晚点 y2: 正点 y3: 提前
+  'dataAnalysis.popularAuthor': '热门航班榜单',
   'dataAnalysis.popularAuthor.column.ranking': '排名',
-  'dataAnalysis.popularAuthor.column.author': '作者',
-  'dataAnalysis.popularAuthor.column.content': '内容量',
-  'dataAnalysis.popularAuthor.column.click': '点击量',
-  'dataAnalysis.contentPeriodAnalysis': '内容时段分析',
+  'dataAnalysis.popularAuthor.column.author': '航班',
+  'dataAnalysis.popularAuthor.column.content': '起飞地',
+  'dataAnalysis.popularAuthor.column.click': '到达地',
+  'dataAnalysis.contentPeriodAnalysis': '到达时段分析', // x: time y: y1: 晚点航班 / 到达航班总数 y2: 准点点航班 / 到达航班总数 y3: 提前航班 / 到达航班总数
 };

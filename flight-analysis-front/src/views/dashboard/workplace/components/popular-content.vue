@@ -35,7 +35,7 @@
         >
           <template #columns>
             <a-table-column title="排名" data-index="key"></a-table-column>
-            <a-table-column title="内容标题" data-index="title">
+            <a-table-column title="名称" data-index="title">
               <template #cell="{ record }">
                 <a-typography-paragraph
                   :ellipsis="{
@@ -46,7 +46,7 @@
                 </a-typography-paragraph>
               </template>
             </a-table-column>
-            <a-table-column title="点击量" data-index="clickNumber">
+            <a-table-column title="到达量" data-index="clickNumber">
             </a-table-column>
             <a-table-column
               title="日涨幅"
@@ -59,8 +59,12 @@
                 <div class="increases-cell">
                   <span>{{ record.increases }}%</span>
                   <icon-caret-up
-                    v-if="record.increases !== 0"
+                    v-if="record.increases > 0 "
                     style="color: #f53f3f; font-size: 8px"
+                  />
+                  <icon-caret-down
+                    v-if="record.increases < 0"
+                    style="color: rgb(0,180,42); font-size: 8px"
                   />
                 </div>
               </template>
@@ -77,6 +81,7 @@
   import useLoading from '@/hooks/loading';
   import { queryPopularList } from '@/api/dashboard';
   import type { TableData } from '@arco-design/web-vue/es/table/interface';
+  import { getRanking } from "@/api/apis";
 
   const type = ref('text');
   const { loading, setLoading } = useLoading();
@@ -84,7 +89,7 @@
   const fetchData = async (contentType: string) => {
     try {
       setLoading(true);
-      const { data } = await queryPopularList({ type: contentType });
+      const { data } = await getRanking({ type: contentType });
       renderList.value = data;
     } catch (err) {
       // you can report use errorHandler or other

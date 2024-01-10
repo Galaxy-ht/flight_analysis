@@ -18,6 +18,7 @@
         <hadoop.version>3.3.0</hadoop.version>
         <hbase.version>2.1.0</hbase.version>
         <zookeeper.version>3.4.6</zookeeper.version>
+        <mybatis-plus.version>3.4.1</mybatis-plus.version>
     </properties>
     <dependencies>
         <dependency>
@@ -92,6 +93,12 @@
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-server</artifactId>
             <version>${hbase.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatis-plus.version}</version>
         </dependency>
 
         <!-- Spark依赖 -->
@@ -174,6 +181,11 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.66</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     <dependencyManagement>

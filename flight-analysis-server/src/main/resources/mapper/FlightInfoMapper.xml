@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="czu.bigdata.flightAnalysis.mapper.FlightInfoMapper">
+
+    <resultMap id="BaseResultMap" type="czu.bigdata.flightAnalysis.entity.FlightInfo">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="departureAirport" column="departure_airport" jdbcType="VARCHAR"/>
+            <result property="departureProvince" column="departure_province" jdbcType="VARCHAR"/>
+            <result property="departureCity" column="departure_city" jdbcType="VARCHAR"/>
+            <result property="departureLongitude" column="departure_longitude" jdbcType="DOUBLE"/>
+            <result property="departureLatitude" column="departure_latitude" jdbcType="DOUBLE"/>
+            <result property="arrivalAirport" column="arrival_airport" jdbcType="VARCHAR"/>
+            <result property="arrivalProvince" column="arrival_province" jdbcType="VARCHAR"/>
+            <result property="arrivalCity" column="arrival_city" jdbcType="VARCHAR"/>
+            <result property="arrivalLongitude" column="arrival_longitude" jdbcType="DOUBLE"/>
+            <result property="arrivalLatitude" column="arrival_latitude" jdbcType="DOUBLE"/>
+            <result property="flightCode" column="flight_code" jdbcType="VARCHAR"/>
+            <result property="flightCompany" column="flight_company" jdbcType="VARCHAR"/>
+            <result property="weather" column="weather" jdbcType="VARCHAR"/>
+            <result property="temperature" column="temperature" jdbcType="DOUBLE"/>
+            <result property="departureAirportHasCase" column="departure_airport_has_case" jdbcType="TINYINT"/>
+            <result property="arrivalAirportHasCase" column="arrival_airport_has_case" jdbcType="TINYINT"/>
+            <result property="aircraftCode" column="aircraft_code" jdbcType="INTEGER"/>
+            <result property="isCancel" column="is_cancel" jdbcType="TINYINT"/>
+            <result property="lateTime" column="late_time" jdbcType="INTEGER"/>
+            <result property="isLate" column="is_late" jdbcType="TINYINT"/>
+            <result property="plannedDepartureTime" column="planned_departure_time" jdbcType="TIMESTAMP"/>
+            <result property="plannedArrivalTime" column="planned_arrival_time" jdbcType="TIMESTAMP"/>
+            <result property="actualDepartureTime" column="actual_departure_time" jdbcType="TIMESTAMP"/>
+            <result property="actualArrivalTime" column="actual_arrival_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,departure_airport,departure_province,
+        departure_city,departure_longitude,departure_latitude,
+        arrival_airport,arrival_province,arrival_city,
+        arrival_longitude,arrival_latitude,flight_code,
+        flight_compony,weather,temperature,
+        departure_airport_has_case,arrival_airport_has_case,aircraft_code,
+        is_cancel,late_time,is_late,
+        planned_departure_time,planned_arrival_time,actual_departure_time,
+        actual_arrival_time
+    </sql>
+</mapper>

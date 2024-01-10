@@ -8,7 +8,7 @@ const PREDICTION: AppRouteRecordRaw = {
   meta: {
     locale: 'menu.prediction',
     requiresAuth: true,
-    icon: 'icon-list',
+    icon: 'icon-check-circle',
     order: 2,
     roles: ['*'],
   },

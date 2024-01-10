@@ -7,6 +7,16 @@ spring:
   config:
     activate:
       on-profile: ht
+  datasource:
+    url: jdbc:mysql://sh-cynosdbmysql-grp-5tpsbo9c.sql.tencentcdb.com:26211/flight_analysis?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
+    username: flight_analysis_user
+    password: 123456azM
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
 hdfs:
   path: hdfs://node1:8020
   username: root
@@ -14,6 +24,10 @@ hdfs:
 spark:
   path: spark://node1:7077
 
+server:
+  port: 613
+  servlet:
+    context-path: /api
 ---
 
 spring:

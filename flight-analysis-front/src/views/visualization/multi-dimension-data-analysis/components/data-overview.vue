@@ -234,25 +234,25 @@
       },
       series: [
         generateSeries(
-          '内容生产量',
+          '晚点航班数',
           '#722ED1',
           '#F5E8FF',
           contentProductionData.value
         ),
         generateSeries(
-          '内容点击量',
+          '准点航班数',
           '#F77234',
           '#FFE4BA',
           contentClickData.value
         ),
         generateSeries(
-          '内容曝光量',
+          '晚点航班数',
           '#33D1C9',
           '#E8FFFB',
           contentExposureData.value
         ),
         generateSeries(
-          '活跃用户数',
+          '取消航班数',
           '#3469FF',
           '#E8F3FF',
           activeUsersData.value
@@ -266,11 +266,11 @@
       const { data } = await queryDataOverview();
       xAxis.value = data.xAxis;
       data.data.forEach((el) => {
-        if (el.name === '内容生产量') {
+        if (el.name === '晚点航班数') {
           contentProductionData.value = el.value;
-        } else if (el.name === '内容点击量') {
+        } else if (el.name === '准点航班数') {
           contentClickData.value = el.value;
-        } else if (el.name === '内容曝光量') {
+        } else if (el.name === '提前航班数') {
           contentExposureData.value = el.value;
         }
         activeUsersData.value = el.value;

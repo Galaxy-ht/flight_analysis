@@ -35,7 +35,7 @@
       },
       yAxis: {
         type: 'category',
-        data: ['点赞量', '评论量', '分享量'],
+        data: ['晚点量', '准点量', '提前量'],
         axisLabel: {
           show: true,
           color: '#4E5969',

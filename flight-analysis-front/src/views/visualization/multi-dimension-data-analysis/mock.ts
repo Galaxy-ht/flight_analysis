@@ -38,10 +38,10 @@ setupMock({
       return successResponseWrap({
         xAxis,
         data: [
-          generateLineData('内容生产量'),
-          generateLineData('内容点击量'),
-          generateLineData('内容曝光量'),
-          generateLineData('活跃用户数'),
+          generateLineData('晚点航班数'),
+          generateLineData('准点航班数'),
+          generateLineData('提前航班数'),
+          generateLineData('取消航班数'),
         ],
       });
     });
