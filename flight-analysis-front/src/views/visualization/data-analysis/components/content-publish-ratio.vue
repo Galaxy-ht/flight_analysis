@@ -110,7 +110,7 @@
       },
       series: [
         {
-          name: '纯文本',
+          name: '晚点',
           data: textChartsData.value,
           stack: 'one',
           type: 'bar',
@@ -118,14 +118,14 @@
           color: isDark ? '#4A7FF7' : '#246EFF',
         },
         {
-          name: '图文类',
+          name: '准点',
           data: imgChartsData.value,
           stack: 'one',
           type: 'bar',
           color: isDark ? '#085FEF' : '#00B2FF',
         },
         {
-          name: '视频类',
+          name: '提前',
           data: videoChartsData.value,
           stack: 'one',
           type: 'bar',

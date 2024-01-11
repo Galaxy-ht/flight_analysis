@@ -21,6 +21,13 @@ export interface PopularRecord {
   increases: number;
 }
 
+export interface pieChart {
+  total: string;
+  late: string;
+  onTime: string;
+  before: string;
+}
+
 export function getDayChart(days: number) {
   return axios.get<chartData[]>(`/api/flight/getDayChart?days=${days}`);
 }
@@ -31,4 +38,8 @@ export function getHomeCount() {
 
 export function getRanking(params: { type: string }) {
   return axios.get<TableData[]>(`/api/flight/getRanking`, { params });
+}
+
+export function getPieChart() {
+  return axios.get<pieChart>('/api/flight/getPieChart');
 }

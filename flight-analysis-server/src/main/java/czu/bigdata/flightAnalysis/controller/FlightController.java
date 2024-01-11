@@ -1,14 +1,13 @@
 package czu.bigdata.flightAnalysis.controller;
 
+import czu.bigdata.flightAnalysis.vo.CardChartVO;
 import czu.bigdata.flightAnalysis.service.FlightInfoService;
 import czu.bigdata.flightAnalysis.utils.Result;
 import czu.bigdata.flightAnalysis.vo.CountVO;
+import czu.bigdata.flightAnalysis.vo.PieChartModel;
 import czu.bigdata.flightAnalysis.vo.RankVO;
 import czu.bigdata.flightAnalysis.vo.XYChartVO;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -35,4 +34,13 @@ public class FlightController {
         return Result.ok(service.getRanking(type));
     }
 
+    @GetMapping("/getPieChart")
+    public Result<PieChartModel> getPieChart() {
+        return Result.ok(service.getPieChart());
+    };
+
+    @PostMapping("/public-opinion-analysis")
+    public Result<CardChartVO> getRealTimeChart(@RequestBody String quota) {
+        return Result.ok(service.getRealTimeChart(quota));
+    }
 }

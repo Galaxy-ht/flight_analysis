@@ -1,7 +1,7 @@
 export default {
   'menu.list.searchTable': '查询表格',
-  'searchTable.form.number': '集合编号',
-  'searchTable.form.number.placeholder': '请输入集合编号',
+  'searchTable.form.number': '航班编号',
+  'searchTable.form.number.placeholder': '请输入航班编号',
   'searchTable.form.name': '集合名称',
   'searchTable.form.name.placeholder': '请输入集合名称',
   'searchTable.form.contentType': '内容体裁',
@@ -23,15 +23,15 @@ export default {
   'searchTable.operation.download': '下载',
   // columns
   'searchTable.columns.index': '#',
-  'searchTable.columns.number': '集合编号',
-  'searchTable.columns.name': '集合名称',
-  'searchTable.columns.contentType': '内容体裁',
-  'searchTable.columns.filterType': '筛选方式',
-  'searchTable.columns.count': '内容量',
-  'searchTable.columns.createdTime': '创建时间',
+  'searchTable.columns.number': '航班编号',
+  'searchTable.columns.name': '所属航司',
+  'searchTable.columns.contentType': '出发地',
+  'searchTable.columns.filterType': '到达地',
+  'searchTable.columns.count': '预计出发时间',
+  'searchTable.columns.createdTime': '预计到达时间',
   'searchTable.columns.status': '状态',
   'searchTable.columns.operations': '操作',
-  'searchTable.columns.operations.view': '查看',
+  'searchTable.columns.operations.view': '预测',
 
   // size
   'searchTable.size.mini': '迷你',

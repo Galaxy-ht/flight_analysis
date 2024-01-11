@@ -1,10 +1,12 @@
 package czu.bigdata.flightAnalysis.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import czu.bigdata.flightAnalysis.vo.CardChartVO;
 import czu.bigdata.flightAnalysis.entity.FlightInfo;
 import czu.bigdata.flightAnalysis.page.PageResult;
 import czu.bigdata.flightAnalysis.query.FlightInfoQuery;
 import czu.bigdata.flightAnalysis.vo.CountVO;
+import czu.bigdata.flightAnalysis.vo.PieChartModel;
 import czu.bigdata.flightAnalysis.vo.RankVO;
 import czu.bigdata.flightAnalysis.vo.XYChartVO;
 
@@ -25,4 +27,8 @@ public interface FlightInfoService extends IService<FlightInfo> {
     void updateActualTime();
 
     List<RankVO> getRanking(String type);
+
+    PieChartModel getPieChart();
+
+    CardChartVO getRealTimeChart(String quota);
 }

@@ -108,7 +108,7 @@
       },
       series: [
         {
-          name: '纯文本',
+          name: '晚点',
           data: textChartsData.value,
           type: 'line',
           smooth: true,
@@ -125,7 +125,7 @@
           },
         },
         {
-          name: '图文类',
+          name: '准点',
           data: imgChartsData.value,
           type: 'line',
           smooth: true,
@@ -142,7 +142,7 @@
           },
         },
         {
-          name: '视频类',
+          name: '提前',
           data: videoChartsData.value,
           type: 'line',
           smooth: true,

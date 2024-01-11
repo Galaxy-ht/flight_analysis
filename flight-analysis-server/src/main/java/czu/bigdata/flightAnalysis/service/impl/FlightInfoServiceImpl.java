@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Function;
+import czu.bigdata.flightAnalysis.vo.CardChartVO;
 import czu.bigdata.flightAnalysis.entity.FlightInfo;
 import czu.bigdata.flightAnalysis.enums.ArrivalType;
 import czu.bigdata.flightAnalysis.enums.FlightType;
@@ -17,6 +18,7 @@ import czu.bigdata.flightAnalysis.query.FlightInfoQuery;
 import czu.bigdata.flightAnalysis.query.Query;
 import czu.bigdata.flightAnalysis.service.FlightInfoService;
 import czu.bigdata.flightAnalysis.vo.CountVO;
+import czu.bigdata.flightAnalysis.vo.PieChartModel;
 import czu.bigdata.flightAnalysis.vo.RankVO;
 import czu.bigdata.flightAnalysis.vo.XYChartVO;
 import org.springframework.stereotype.Service;
@@ -87,7 +89,7 @@ public class FlightInfoServiceImpl extends ServiceImpl<FlightInfoMapper, FlightI
         wrapper.select("DATE(planned_departure_time) as x, count(1) as y");
 
 
-        return this.baseMapper.selectMaps(wrapper).stream().map(item -> new XYChartVO((Date) item.get("x"), (Long) item.get("y"))).collect(Collectors.toList());
+        return this.baseMapper.selectMaps(wrapper).stream().map(item -> new XYChartVO(item.get("x").toString(), String.valueOf(item.get("y")))).collect(Collectors.toList());
     }
 
     @Override
@@ -114,8 +116,12 @@ public class FlightInfoServiceImpl extends ServiceImpl<FlightInfoMapper, FlightI
         wrapper.eq("is_cancel", 0);
         this.list(wrapper).forEach(item -> {
             if (finalProbability < 0.3) {
-                item.setActualArrivalTime(getRandomTime(currentTime, 61, 60));
-                item.setIsLate(1);
+                Date randomTime = getRandomTime(currentTime, 61, 120);
+                item.setActualArrivalTime(randomTime);
+                if (randomTime.after(currentTime)) {
+                    item.setIsLate(1);
+                    item.setLateTime((int) Math.ceil(randomTime.getTime() - currentTime.getTime()) / (60 * 60 * 1000));
+                }
             } else {
                 item.setActualArrivalTime(getRandomTime(currentTime, 61, 0));
             }
@@ -164,6 +170,74 @@ public class FlightInfoServiceImpl extends ServiceImpl<FlightInfoMapper, FlightI
         return result;
     }
 
+    @Override
+    public PieChartModel getPieChart() {
+        List<FlightInfo> todayFlight = getTodayFlight();
+        List<FlightInfo> total = getFlight(todayFlight, FlightType.ARRIVED);
+        List<FlightInfo> late = getArrivalFlight(total, ArrivalType.LATE);
+        List<FlightInfo> onTime = getArrivalFlight(total, ArrivalType.ON_TIME);
+        List<FlightInfo> before = getArrivalFlight(total, ArrivalType.BEFORE);
+
+        return new PieChartModel(String.valueOf(total.size()), String.valueOf(late.size()), String.valueOf(onTime.size()), String.valueOf(before.size()));
+    }
+
+    @Override
+    public CardChartVO getRealTimeChart(String quota) {
+        Date currentTime = new Date();
+        MonthTableNameHandler.setData(currentTime);
+        LocalDateTime localDateTime = toLocalDateTime(currentTime);
+        LocalDateTime twentyFourHoursAgo = localDateTime.minusHours(24);
+
+        QueryWrapper<FlightInfo> wrapper = new QueryWrapper<>();
+        wrapper.between("planned_departure_time", twentyFourHoursAgo, localDateTime);
+
+        if (Objects.equals(quota, "{\"quota\":\"visitors\"}")) {
+            wrapper.between("actual_departure_time", localDateTime.minusMinutes(30L), localDateTime.plusMinutes(30L));
+        } else if (Objects.equals(quota, "{\"quota\":\"published\"}")) {
+            wrapper.ge("is_cancel", 1);
+        }
+
+        if (Objects.equals(quota, "{\"quota\":\"visitors\"}")) {
+        List<XYChartVO> chartData = this.list(wrapper).stream()
+                .collect(Collectors.groupingBy(info -> {
+                    // 获取actual_depature_time的小时部分
+                    return info.getActualDepartureTime().getHours();
+                }, Collectors.summingInt(info -> {
+                    // 如果actual_depature_time为空，则返回0，否则返回1
+                    return (info.getActualDepartureTime() != null) ? 1 : 0;
+                })))
+                .entrySet().stream()
+                .map(entry -> new XYChartVO(
+                        String.valueOf(entry.getKey()), // 小时
+                        getHourlyTimeRange(entry.getKey()), // 小时对应的时间段
+                        String.valueOf(entry.getValue()))) // 统计结果
+                .collect(Collectors.toList());
+        int count = chartData.size();
+
+
+        return new CardChartVO(count, String.valueOf(Integer.parseInt(chartData.get(count-1).getY()) - Integer.parseInt(chartData.get(count-2).getY())), chartData);
+        } else if (Objects.equals(quota, "{\"quota\":\"published\"}")) {
+            List<XYChartVO> chartData = this.list(wrapper).stream()
+                    .collect(Collectors.groupingBy(info -> {
+                        // 获取actual_depature_time的小时部分
+                        return info.getActualDepartureTime().getHours();
+                    }, Collectors.summingInt(info -> {
+                        // 如果actual_depature_time为空，则返回0，否则返回1
+                        return (info.getIsCancel() == 1) ? 1 : 0;
+                    })))
+                    .entrySet().stream()
+                    .map(entry -> new XYChartVO(
+                            String.valueOf(entry.getKey()), // 小时
+                            getHourlyTimeRange(entry.getKey()), // 小时对应的时间段
+                            String.valueOf(entry.getValue()))) // 统计结果
+                    .collect(Collectors.toList());
+            int count = chartData.size();
+
+            return new CardChartVO(count, String.valueOf(Integer.parseInt(chartData.get(count-1).getY()) - Integer.parseInt(chartData.get(count-2).getY())), chartData);
+        }
+        return null;
+    }
+
     private IPage<FlightInfo> getPage(Query query) {
         if (query.getPageNo() == null && query.getPageSize() == null) {
             query.setPageNo(1);
@@ -207,15 +281,30 @@ public class FlightInfoServiceImpl extends ServiceImpl<FlightInfoMapper, FlightI
         switch (type) {
             case LATE:
                 return flightList.stream()
-                        .filter(flight -> flight.getIsLate().equals(1))
+                        .filter(flight -> {
+                            LocalDateTime plannedArrival = toLocalDateTime(flight.getPlannedArrivalTime());
+                            LocalDateTime actualArrival = toLocalDateTime(flight.getActualArrivalTime());
+                            long minutesDifference = plannedArrival.until(actualArrival, java.time.temporal.ChronoUnit.MINUTES);
+                            return minutesDifference < 0;
+                        })
                         .collect(Collectors.toList());
             case BEFORE:
                 return flightList.stream()
-                        .filter(flight -> flight.getPlannedArrivalTime().equals(flight.getActualArrivalTime()))
+                        .filter(flight -> {
+                            LocalDateTime plannedArrival = toLocalDateTime(flight.getPlannedArrivalTime());
+                            LocalDateTime actualArrival = toLocalDateTime(flight.getActualArrivalTime());
+                            long minutesDifference = plannedArrival.until(actualArrival, java.time.temporal.ChronoUnit.MINUTES);
+                            return minutesDifference > 0;
+                        })
                         .collect(Collectors.toList());
             case ON_TIME:
                 return flightList.stream()
-                        .filter(flight -> flight.getPlannedArrivalTime().before(flight.getActualArrivalTime()))
+                        .filter(flight -> {
+                            LocalDateTime plannedArrival = toLocalDateTime(flight.getPlannedArrivalTime());
+                            LocalDateTime actualArrival = toLocalDateTime(flight.getActualArrivalTime());
+                            long minutesDifference = plannedArrival.until(actualArrival, java.time.temporal.ChronoUnit.MINUTES);
+                            return minutesDifference == 0;
+                        })
                         .collect(Collectors.toList());
             default:
                 return flightList;
@@ -267,6 +356,16 @@ public class FlightInfoServiceImpl extends ServiceImpl<FlightInfoMapper, FlightI
         calendar.setTime(currentTime);
         calendar.add(Calendar.DAY_OF_MONTH, -1);
         return calendar.getTime();
+    }
+
+    private LocalDateTime toLocalDateTime(Date date) {
+        Instant instant = date.toInstant();
+        return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+    }
+
+    private static String getHourlyTimeRange(int hour) {
+        // 根据小时生成对应的时间段，这里可以根据实际情况进行调整
+        return hour + ":00 - " + (hour + 1) + ":00";
     }
 }
 

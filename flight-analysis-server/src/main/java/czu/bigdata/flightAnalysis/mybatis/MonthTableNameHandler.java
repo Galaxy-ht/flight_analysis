@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.handler.TableNameHandler;
 import lombok.Getter;
 
 import java.util.Date;
+import java.util.Objects;
 
 @Getter
 public class MonthTableNameHandler implements TableNameHandler {
@@ -27,6 +28,9 @@ public class MonthTableNameHandler implements TableNameHandler {
     @Override
     public String dynamicTableName(String sql, String tableName) {
         if (this.tableNames.contains(tableName)){
+            if (Objects.isNull(MONTH_DATA.get())) {
+                return tableName;
+            }
             Date date = MONTH_DATA.get();
             String year = String.valueOf(date.getYear() + 1900);
             String month = String.format("%0"+2+"d", date.getMonth() + 1);

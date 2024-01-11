@@ -19,7 +19,6 @@
         </a-grid-item>
       </a-grid>
       <DataChainGrowth />
-      <ContentPublishingSource />
     </a-space>
   </div>
 </template>

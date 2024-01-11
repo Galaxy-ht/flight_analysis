@@ -1,5 +1,5 @@
 export default {
-  'menu.visualization.dataAnalysis': '实时分析页',
+  'menu.visualization.dataAnalysis': '实时监控',
   'dataAnalysis.title.publicOpinion': '舆情分析',
   'dataAnalysis.card.title.allVisitors': '航班起飞统计', // x: time y: fly count
   'dataAnalysis.card.title.contentPublished': '起飞取消统计', // x: time(12h) y: fly count

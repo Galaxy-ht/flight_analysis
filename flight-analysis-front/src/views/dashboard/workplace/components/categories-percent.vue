@@ -18,8 +18,31 @@
 <script lang="ts" setup>
   import useLoading from '@/hooks/loading';
   import useChartOption from '@/hooks/chart-option';
+  import { ref } from "vue";
+  import { getPieChart, pieChart } from "@/api/apis";
 
-  const { loading } = useLoading();
+  const { loading, setLoading } = useLoading();
+  const genPieModel = () => {
+    return {
+      total: '0',
+      late: '0',
+      onTime: '0',
+      before: '0',
+    }
+  }
+  const pie = ref(genPieModel());
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const { data } = await getPieChart();
+      pie.value = data;
+    } catch (err) {
+      // you can report use errorHandler or other
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchData();
   const { chartOption } = useChartOption((isDark) => {
     // echarts support https://echarts.apache.org/zh/theme-builder.html
     // It's not used here
@@ -59,7 +82,7 @@
             left: 'center',
             top: '50%',
             style: {
-              text: '928,531',
+              text: pie.value.total,
               textAlign: 'center',
               fill: isDark ? '#ffffffb3' : '#1D2129',
               fontSize: 16,
@@ -84,21 +107,21 @@
           },
           data: [
             {
-              value: [148564],
+              value: [pie.value.late],
               name: '晚点',
               itemStyle: {
                 color: isDark ? '#3D72F6' : '#249EFF',
               },
             },
             {
-              value: [334271],
+              value: [pie.value.onTime],
               name: '准点',
               itemStyle: {
                 color: isDark ? '#A079DC' : '#313CA9',
               },
             },
             {
-              value: [445694],
+              value: [pie.value.before],
               name: '提前',
               itemStyle: {
                 color: isDark ? '#6CAAF5' : '#21CCFF',

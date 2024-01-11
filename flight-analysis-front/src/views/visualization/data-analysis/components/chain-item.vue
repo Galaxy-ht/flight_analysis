@@ -211,6 +211,7 @@
   const fetchData = async (params: PublicOpinionAnalysis) => {
     try {
       const { data } = await queryPublicOpinionAnalysis(params);
+      console.log(data);
       renderData.value = data;
       const { chartData } = data;
       if (props.chartType === 'bar') {
