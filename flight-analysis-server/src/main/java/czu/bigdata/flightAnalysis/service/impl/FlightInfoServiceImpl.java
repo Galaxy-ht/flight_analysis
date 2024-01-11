@@ -191,14 +191,15 @@ public class FlightInfoServiceImpl extends ServiceImpl<FlightInfoMapper, FlightI
         QueryWrapper<FlightInfo> wrapper = new QueryWrapper<>();
         wrapper.between("planned_departure_time", twentyFourHoursAgo, localDateTime);
 
-        if (Objects.equals(quota, "{\"quota\":\"visitors\"}")) {
-            wrapper.between("actual_departure_time", localDateTime.minusMinutes(30L), localDateTime.plusMinutes(30L));
-        } else if (Objects.equals(quota, "{\"quota\":\"published\"}")) {
-            wrapper.ge("is_cancel", 1);
-        }
+//        if (Objects.equals(quota, "{\"quota\":\"visitors\"}")) {
+//            wrapper.between("actual_departure_time", localDateTime.minusMinutes(30L), localDateTime.plusMinutes(30L));
+//        } else if (Objects.equals(quota, "{\"quota\":\"published\"}")) {
+//            wrapper.ge("is_cancel", 1);
+//        }
 
         if (Objects.equals(quota, "{\"quota\":\"visitors\"}")) {
         List<XYChartVO> chartData = this.list(wrapper).stream()
+                .filter(i -> !Objects.isNull(i.getActualDepartureTime()))
                 .collect(Collectors.groupingBy(info -> {
                     // 获取actual_depature_time的小时部分
                     return info.getActualDepartureTime().getHours();
@@ -212,12 +213,14 @@ public class FlightInfoServiceImpl extends ServiceImpl<FlightInfoMapper, FlightI
                         getHourlyTimeRange(entry.getKey()), // 小时对应的时间段
                         String.valueOf(entry.getValue()))) // 统计结果
                 .collect(Collectors.toList());
-        int count = chartData.size();
+            int count = chartData.stream()
+                    .mapToInt(vo -> Integer.parseInt(vo.getY()))
+                    .sum();
 
-
-        return new CardChartVO(count, String.valueOf(Integer.parseInt(chartData.get(count-1).getY()) - Integer.parseInt(chartData.get(count-2).getY())), chartData);
+            return new CardChartVO(count, String.valueOf(Integer.parseInt(chartData.get(chartData.size() - 1).getY()) - Integer.parseInt(chartData.get(chartData.size() - 2).getY())), chartData);
         } else if (Objects.equals(quota, "{\"quota\":\"published\"}")) {
             List<XYChartVO> chartData = this.list(wrapper).stream()
+                    .filter(i -> !Objects.isNull(i.getActualDepartureTime()))
                     .collect(Collectors.groupingBy(info -> {
                         // 获取actual_depature_time的小时部分
                         return info.getActualDepartureTime().getHours();
@@ -231,9 +234,56 @@ public class FlightInfoServiceImpl extends ServiceImpl<FlightInfoMapper, FlightI
                             getHourlyTimeRange(entry.getKey()), // 小时对应的时间段
                             String.valueOf(entry.getValue()))) // 统计结果
                     .collect(Collectors.toList());
-            int count = chartData.size();
 
-            return new CardChartVO(count, String.valueOf(Integer.parseInt(chartData.get(count-1).getY()) - Integer.parseInt(chartData.get(count-2).getY())), chartData);
+            int count = chartData.stream()
+                    .mapToInt(vo -> Integer.parseInt(vo.getY()))
+                    .sum();
+
+            return new CardChartVO(count, String.valueOf(Integer.parseInt(chartData.get(chartData.size() - 1).getY()) - Integer.parseInt(chartData.get(chartData.size() - 2).getY())), chartData);
+        } else if (Objects.equals(quota, "{\"quota\":\"comment\"}")) {
+            List<XYChartVO> chartData = this.list(wrapper).stream()
+                    .filter(i -> !Objects.isNull(i.getActualArrivalTime()))
+                    .collect(Collectors.groupingBy(info -> {
+                        // 获取actual_depature_time的小时部分
+                        return info.getActualArrivalTime().getHours();
+                    }, Collectors.summingInt(info -> {
+                        // 如果actual_depature_time为空，则返回0，否则返回1
+                        return (info.getActualArrivalTime() != null) ? 1 : 0;
+                    })))
+                    .entrySet().stream()
+                    .map(entry -> new XYChartVO(
+                            String.valueOf(entry.getKey()), // 小时
+                            getHourlyTimeRange(entry.getKey()), // 小时对应的时间段
+                            String.valueOf(entry.getValue()))) // 统计结果
+                    .collect(Collectors.toList());
+            int count = chartData.stream()
+                    .mapToInt(vo -> Integer.parseInt(vo.getY()))
+                    .sum();
+            String increase = "";
+            try {
+                increase = String.valueOf(Integer.parseInt(chartData.get(chartData.size() - 1).getY()) - Integer.parseInt(chartData.get(chartData.size() - 2).getY()));
+            } catch (Exception e) {
+                increase = "0";
+            }
+
+            return new CardChartVO(count, increase, chartData);
+        } else if (Objects.equals(quota, "{\"quota\":\"share\"}")) {
+            List<FlightInfo> list = this.list(wrapper);
+            List<XYChartVO> chartData = new ArrayList<>();
+
+
+            int late = getArrivalFlight(list, ArrivalType.LATE).size();
+            chartData.add(new XYChartVO("晚点" , "晚点" , String.valueOf(late)));
+
+            int onTime = getArrivalFlight(list, ArrivalType.ON_TIME).size();
+            chartData.add(new XYChartVO("准点" , "准点" , String.valueOf(onTime)));
+
+            int before = getArrivalFlight(list, ArrivalType.BEFORE).size();
+            chartData.add(new XYChartVO("提前" , "提前" , String.valueOf(before)));
+
+            int today = chartData.size();
+            int yesterday = getFlight(getDayFlight(getYesterday(currentTime)), FlightType.ARRIVED).size();
+            return new CardChartVO(today, String.valueOf(today - yesterday), chartData);
         }
         return null;
     }

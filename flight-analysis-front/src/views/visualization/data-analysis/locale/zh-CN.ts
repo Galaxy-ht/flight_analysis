@@ -5,7 +5,7 @@ export default {
   'dataAnalysis.card.title.contentPublished': '起飞取消统计', // x: time(12h) y: fly count
   'dataAnalysis.card.title.totalComment': '航班到达总数', // x: time y: arrive count
   'dataAnalysis.card.title.totalShare': '到达时间统计', // x: 晚点、正点、提前 y: arrive count
-  'dataAnalysis.card.yesterday': '较昨日', // today count / yesterday count
+  'dataAnalysis.card.yesterday': '较上小时', // today count / yesterday count
   'dataAnalysis.contentPublishRatio': '正晚点总览', // x: time y: y1: 晚点 y2: 正点 y3: 提前
   'dataAnalysis.popularAuthor': '热门航班榜单',
   'dataAnalysis.popularAuthor.column.ranking': '排名',

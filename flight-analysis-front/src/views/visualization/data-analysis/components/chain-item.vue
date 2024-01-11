@@ -12,7 +12,7 @@
           />
           <div class="desc">
             <a-typography-text type="secondary" class="label">
-              {{ $t('dataAnalysis.card.yesterday') }}
+              {{ $t('dataAnalysis.card.yesterday') }} <br />
             </a-typography-text>
             <a-typography-text type="danger">
               {{ renderData.growth }}
@@ -99,7 +99,7 @@
         },
         series: [
           {
-            name: '2001',
+            name: 'total',
             data: data.value[0],
             type: 'line',
             showSymbol: false,
@@ -110,7 +110,7 @@
             },
           },
           {
-            name: '2002',
+            name: 'total',
             data: data.value[1],
             type: 'line',
             showSymbol: false,
@@ -211,7 +211,6 @@
   const fetchData = async (params: PublicOpinionAnalysis) => {
     try {
       const { data } = await queryPublicOpinionAnalysis(params);
-      console.log(data);
       renderData.value = data;
       const { chartData } = data;
       if (props.chartType === 'bar') {
@@ -234,9 +233,38 @@
         });
         chartOption.value = lineChartOption.value;
       } else {
+        const model = [{
+            name: '晚点',
+            value: 0,
+            itemStyle: {
+              color: '#8D4EDA',
+            },
+          },
+          {
+            name: '准点',
+            value: 0,
+            itemStyle: {
+              color: '#165DFF',
+            },
+          },
+          {
+            name: '提前',
+            value: 0,
+            itemStyle: {
+              color: '#00B2FF',
+            },
+          },
+        ];
         chartData.forEach((el) => {
-          pieData.value.push(el);
+          if (el.name === '晚点') {
+            model[0].value = el.y;
+          } else if (el.name === '准点') {
+            model[1].value = el.y;
+          } else if (el.name === '提前') {
+            model[2].value = el.y;
+          }
         });
+        pieData.value = model;
         chartOption.value = pieChartOption.value;
       }
     } catch (err) {
