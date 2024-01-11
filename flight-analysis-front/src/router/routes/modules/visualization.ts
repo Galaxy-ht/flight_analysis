@@ -34,8 +34,8 @@ const VISUALIZATION: AppRouteRecordRaw = {
       },
     },
     {
-      path: "big-screen",
-      name: "BigScreen",
+      path: 'big-screen',
+      name: 'BigScreen',
       component: () => import('@/views/visualization/big-screen/index.vue'),
       meta: {
         locale: 'menu.visualization.BigScreen',

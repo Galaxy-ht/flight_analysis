@@ -143,9 +143,9 @@
       const { data: chartData } = await queryContentPublish();
       xAxis.value = chartData[0].x;
       chartData.forEach((el: ContentPublishRecord) => {
-        if (el.name === '纯文本') {
+        if (el.name === '晚点') {
           textChartsData.value = el.y;
-        } else if (el.name === '图文类') {
+        } else if (el.name === '准点') {
           imgChartsData.value = el.y;
         }
         videoChartsData.value = el.y;

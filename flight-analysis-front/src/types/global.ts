@@ -32,6 +32,6 @@ export interface Pagination {
 export type TimeRanger = [string, string];
 
 export interface GeneralChart {
-  xAxis: string[];
+  xaxis: string[];
   data: Array<{ name: string; value: number[] }>;
 }

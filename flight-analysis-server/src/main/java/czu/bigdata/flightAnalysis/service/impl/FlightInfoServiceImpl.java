@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Function;
-import czu.bigdata.flightAnalysis.vo.CardChartVO;
+import czu.bigdata.flightAnalysis.vo.*;
 import czu.bigdata.flightAnalysis.entity.FlightInfo;
 import czu.bigdata.flightAnalysis.enums.ArrivalType;
 import czu.bigdata.flightAnalysis.enums.FlightType;
@@ -17,21 +17,15 @@ import czu.bigdata.flightAnalysis.page.PageResult;
 import czu.bigdata.flightAnalysis.query.FlightInfoQuery;
 import czu.bigdata.flightAnalysis.query.Query;
 import czu.bigdata.flightAnalysis.service.FlightInfoService;
-import czu.bigdata.flightAnalysis.vo.CountVO;
-import czu.bigdata.flightAnalysis.vo.PieChartModel;
-import czu.bigdata.flightAnalysis.vo.RankVO;
-import czu.bigdata.flightAnalysis.vo.XYChartVO;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
 * @author MrHao
@@ -286,6 +280,95 @@ public class FlightInfoServiceImpl extends ServiceImpl<FlightInfoMapper, FlightI
             return new CardChartVO(today, String.valueOf(today - yesterday), chartData);
         }
         return null;
+    }
+
+    @Override
+    public List<RankingVO> getPopularFlight() {
+        List<FlightInfo> todayFlight = this.getTodayFlight();
+        AtomicInteger rank = new AtomicInteger(0);
+        return todayFlight.stream()
+                .collect(Collectors.groupingBy(FlightInfo::getFlightCode, Collectors.counting()))
+                .entrySet().stream()
+                .sorted(Comparator.<Map.Entry<String, Long>, Long>comparing(entry -> entry.getValue()).reversed())
+                .limit(10)
+                .map(entry -> new RankingVO(
+                        rank.incrementAndGet(),
+                        entry.getKey(),
+                        todayFlight.stream()
+                                .filter(flightInfo -> entry.getKey().equals(flightInfo.getFlightCode()))
+                                .findFirst()
+                                .map(FlightInfo::getDepartureCity)
+                                .orElse(null),
+                        todayFlight.stream()
+                                .filter(flightInfo -> entry.getKey().equals(flightInfo.getFlightCode()))
+                                .findFirst()
+                                .map(FlightInfo::getArrivalCity)
+                                .orElse(null)
+                ))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BarChartVO> getBarChart() {
+        List<FlightInfo> todayFlight = getTodayFlight();
+
+        return Arrays.stream(ArrivalType.values())
+                .map(arrivalType -> {
+                    List<Integer> counts = getHourLabels().stream()
+                            .map(hourLabel -> getArrivalFlight(todayFlight, arrivalType).stream()
+                                    .filter(flightInfo -> isFlightInHourRange(flightInfo, hourLabel))
+                                    .collect(Collectors.toList()).size())
+                            .collect(Collectors.toList());
+
+                    return new BarChartVO(arrivalType.getMsg(), getHourLabels(), counts);
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public LineChartVO getLineChart() {
+        List<FlightInfo> todayFlight = getTodayFlight();
+
+        List<String> xAxis = getHourLabels();
+        List<DataVO> data = Arrays.stream(ArrivalType.values())
+                .map(arrivalType -> {
+                    List<Integer> values = xAxis.stream()
+                            .map(hourLabel -> {
+                                List<FlightInfo> filteredFlights = getArrivalFlight(todayFlight, arrivalType).stream()
+                                        .filter(flightInfo -> isFlightInHourRange(flightInfo, hourLabel))
+                                        .collect(Collectors.toList());
+                                int count = filteredFlights.size();
+                                int percentage = (int) ((count / (double) todayFlight.size()) * 100);
+                                return count > 0 ? percentage : 0;
+                            })
+                            .collect(Collectors.toList());
+
+                    return new DataVO(arrivalType.getMsg(), values);
+                })
+                .collect(Collectors.toList());
+
+        return new LineChartVO(xAxis, data);
+    }
+
+    private List<String> getHourLabels() {
+        int end = LocalDateTime.now().getHour();
+        int start = 0;
+        if (end > 12) {
+            start = end - 12;
+        } else {
+            start = 24 - (12 - end);
+        }
+        return IntStream.rangeClosed(start, end)
+                .mapToObj(hour -> String.format("%02d:00", hour))
+                .collect(Collectors.toList());
+    }
+
+    private boolean isFlightInHourRange(FlightInfo flightInfo, String hourLabel) {
+        String[] parts = hourLabel.split(":");
+        int hour = Integer.parseInt(parts[0]);
+
+        LocalTime flightDepartureTime = LocalTime.from(toLocalDateTime(flightInfo.getActualDepartureTime()));
+        return flightDepartureTime.getHour() == hour;
     }
 
     private IPage<FlightInfo> getPage(Query query) {

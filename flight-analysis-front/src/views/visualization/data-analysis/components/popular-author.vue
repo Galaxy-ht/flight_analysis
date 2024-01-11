@@ -22,23 +22,17 @@
           </a-table-column>
           <a-table-column
             :title="$t('dataAnalysis.popularAuthor.column.author')"
-            data-index="author"
+            data-index="flightCode"
           >
           </a-table-column>
           <a-table-column
             :title="$t('dataAnalysis.popularAuthor.column.content')"
-            data-index="contentCount"
-            :sortable="{
-              sortDirections: ['ascend', 'descend'],
-            }"
+            data-index="departure"
           >
           </a-table-column>
           <a-table-column
             :title="$t('dataAnalysis.popularAuthor.column.click')"
-            data-index="clickCount"
-            :sortable="{
-              sortDirections: ['ascend', 'descend'],
-            }"
+            data-index="arrival"
           >
           </a-table-column>
         </template>
@@ -58,7 +52,7 @@
     try {
       setLoading(true);
       const { data } = await queryPopularAuthor();
-      tableData.value = data;
+      tableData.value.list = data;
     } catch (err) {
       // you can report use errorHandler or other
     } finally {

@@ -25,14 +25,14 @@ export function queryDataChainGrowth(data: DataChainGrowth) {
 export interface PopularAuthorRes {
   list: {
     ranking: number;
-    author: string;
-    contentCount: number;
-    clickCount: number;
+    flightCode: string;
+    departure: number;
+    arrival: number;
   }[];
 }
 
 export function queryPopularAuthor() {
-  return axios.get<PopularAuthorRes>('/api/popular-author/list');
+  return axios.get<PopularAuthorRes>('/api/flight/getPopularFlight');
 }
 
 export interface ContentPublishRecord {
@@ -42,11 +42,11 @@ export interface ContentPublishRecord {
 }
 
 export function queryContentPublish() {
-  return axios.get<ContentPublishRecord[]>('/api/content-publish');
+  return axios.get<ContentPublishRecord[]>('/api/flight/content-publish');
 }
 
 export function queryContentPeriodAnalysis() {
-  return axios.post<GeneralChart>('/api/content-period-analysis');
+  return axios.post<GeneralChart>('/api/flight/content-period-analysis');
 }
 
 export interface PublicOpinionAnalysis {

@@ -190,11 +190,12 @@
     setLoading(true);
     try {
       const { data: chartData } = await queryContentPeriodAnalysis();
-      xAxis.value = chartData.xAxis;
+      console.log(chartData);
+      xAxis.value = chartData.xaxis;
       chartData.data.forEach((el) => {
-        if (el.name === '纯文本') {
+        if (el.name === '晚点') {
           textChartsData.value = el.value;
-        } else if (el.name === '图文类') {
+        } else if (el.name === '准点') {
           imgChartsData.value = el.value;
         }
         videoChartsData.value = el.value;
