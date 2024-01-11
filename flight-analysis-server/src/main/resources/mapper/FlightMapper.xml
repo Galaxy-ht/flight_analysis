@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="czu.bigdata.flightAnalysis.mapper.FlightMapper">
+
+    <resultMap id="BaseResultMap" type="czu.bigdata.flightAnalysis.entity.Flight">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="flightCode" column="flight_code" jdbcType="VARCHAR"/>
+            <result property="departureProvince" column="departure_province" jdbcType="VARCHAR"/>
+            <result property="departureCity" column="departure_city" jdbcType="VARCHAR"/>
+            <result property="departureAirport" column="departure_airport" jdbcType="VARCHAR"/>
+            <result property="departureLongitude" column="departure_longitude" jdbcType="DECIMAL"/>
+            <result property="departureLatitude" column="departure_latitude" jdbcType="DECIMAL"/>
+            <result property="arrivalProvince" column="arrival_province" jdbcType="VARCHAR"/>
+            <result property="arrivalCity" column="arrival_city" jdbcType="VARCHAR"/>
+            <result property="arrivalAirport" column="arrival_airport" jdbcType="VARCHAR"/>
+            <result property="arrivalLongitude" column="arrival_longitude" jdbcType="DECIMAL"/>
+            <result property="arrivalLatitude" column="arrival_latitude" jdbcType="DECIMAL"/>
+            <result property="plannedDepartureTime" column="planned_departure_time" jdbcType="TIMESTAMP"/>
+            <result property="plannedArrivalTime" column="planned_arrival_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,flight_code,departure_province,
+        departure_city,departure_airport,departure_longitude,
+        departure_latitude,arrival_province,arrival_city,
+        arrival_airport,arrival_longitude,arrival_latitude,
+        planned_departure_time,planned_arrival_time
+    </sql>
+</mapper>
